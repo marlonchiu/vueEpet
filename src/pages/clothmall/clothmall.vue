@@ -1,19 +1,15 @@
 <template>
   <div>
-    <main-footer></main-footer>
-    <router-view></router-view>
+    clothmall  components
   </div>
 </template>
 
 <script>
-  import footer from './components/footer/footer.vue'
   export default {
     data (){
       return {}
     },
-    components: {
-      'main-footer': footer
-    }
+    components: {}
   }
 </script>
 

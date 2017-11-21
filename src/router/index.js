@@ -6,7 +6,10 @@ import main from '../pages/main/main.vue'
 import cart from '../pages/cart/cart.vue'
 import category from '../pages/category/category.vue'
 import place from '../pages/place/place.vue'
-import user from '../pages/user/user.vue'
+import login from '../pages/login/login.vue'
+import clothmall from '../pages/clothmall/clothmall.vue'
+import sort from '../components/sort/sort.vue'
+import brand from '../components/brand/brand.vue'
 
 Vue.use(VueRouter)
 export default new VueRouter({
@@ -22,19 +25,37 @@ export default new VueRouter({
     },
     {
       path: '/category',
-      component: category
+      component: category,
+      children: [
+        {
+          path: '/category',
+          redirect: '/category/tab1'
+        },
+        {
+          path: 'tab1',
+          component: sort
+        },
+        {
+          path: '/category/tab2',
+          component: brand
+        },
+      ]
     },
     {
       path: '/cart',
       component: cart
     },
     {
-      path: '/user',
-      component: user
+      path: '/login',
+      component: login
     },
     {
       path: '/place',
       component: place
+    },
+    {
+      path: '/clothmall',
+      component: clothmall
     }
   ]
 })
