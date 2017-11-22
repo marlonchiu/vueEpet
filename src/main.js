@@ -8,6 +8,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import App from './App'
 import router from './router'
 import '../static/css/reset.css'
+import './mock/mockServer'
 
 Vue.component(Search.name, Search);
 Vue.component(Swipe.name, Swipe);

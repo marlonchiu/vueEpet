@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-if="isShow">
     <ul class="tab">
       <li class="tab-item1">
         <router-link to="/main">
@@ -11,12 +11,12 @@
           <div style="width: 100% ;height: 100%"></div>
         </router-link>
       </li>
-      <li class="tab-item3">
+      <li class="tab-item3" @click="hideFooter">
         <router-link to="/cart">
           <div style="width: 100% ;height: 100%"></div>
         </router-link>
       </li>
-      <li class="tab-item4">
+      <li class="tab-item4" @click="hideFooter">
         <router-link to="/login">
           <div style="width: 100% ;height: 100%"></div>
         </router-link>
@@ -28,7 +28,14 @@
 <script>
   export default {
     data (){
-      return {}
+      return {
+        isShow: true
+      }
+    },
+    methods: {
+      hideFooter(){
+        this.isShow = false
+      }
     },
     components: {}
   }

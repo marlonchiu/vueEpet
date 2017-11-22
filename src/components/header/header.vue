@@ -14,12 +14,12 @@
     </div>
     <div class="epet-search ">
       <div class="location">
-        <a href="javascript:;">
+        <router-link to="/place">
           <span class="dogStation c89">狗狗站</span>
           <span class="c89">|</span>
           <span data-name="my-place" class="myposition">{{location}}</span>
           <i class="icon_down"></i>
-        </a>
+        </router-link>
       </div>
       <p class="search-text">
         <a href="##">
@@ -34,11 +34,11 @@
     <div class="find_nav" ref="findNav">
         <ul class="tab">
           <li class="tab-item">
-            <router-link to="/clothmall">首页</router-link>
-            <!--<a href="#">首页</a>-->
+            <a href="#">首页</a>
           </li>
           <li class="tab-item">
-            <a href="#">服饰城</a>
+            <!--<a href="#">服饰城</a>-->
+            <router-link to="/clothmall">服饰城</router-link>
           </li>
           <li class="tab-item">
             <a href="#">狗狗主粮</a>

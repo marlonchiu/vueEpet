@@ -14,6 +14,7 @@
       <ratings></ratings>
       <judgeitem></judgeitem>
       <copyright></copyright>
+      <godog></godog>
     </div>
 
 
@@ -31,6 +32,7 @@
   import ratings from '../../components/ratings/ratings.vue'
   import judgeitem from '../../components/judgeitem/judgeitem.vue'
   import copyright from '../../components/copyright/copyright.vue'
+  import godog from '../../components/godog/godog.vue'
   export default {
     data (){
       return {}
@@ -46,7 +48,8 @@
       surprise,
       copyright,
       ratings,
-      judgeitem
+      judgeitem,
+      godog
     }
   }
 </script>

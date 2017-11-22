@@ -7,6 +7,7 @@ import cart from '../pages/cart/cart.vue'
 import category from '../pages/category/category.vue'
 import place from '../pages/place/place.vue'
 import login from '../pages/login/login.vue'
+import register from '../pages/register/register.vue'
 import clothmall from '../pages/clothmall/clothmall.vue'
 import sort from '../components/sort/sort.vue'
 import brand from '../components/brand/brand.vue'
@@ -56,6 +57,10 @@ export default new VueRouter({
     {
       path: '/clothmall',
       component: clothmall
+    },
+    {
+      path: '/register',
+      component: register
     }
   ]
 })
