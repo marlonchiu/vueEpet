@@ -2,7 +2,8 @@ import Vue from 'vue'
 import {
   Search,
   Swipe,
-  SwipeItem
+  SwipeItem,
+  Toast
 } from 'mint-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import App from './App'
@@ -13,6 +14,7 @@ import './mock/mockServer'
 Vue.component(Search.name, Search);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
+Vue.component(Toast.name, Toast);
 Vue.use(VueAwesomeSwiper)
 new Vue({
   el: '#app',

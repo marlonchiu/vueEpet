@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div style="display: none">
+    <div v-if="!isShow">
       <div class="putPhone">
         <span class="phoneIcon"></span>
-        <input type="text" placeholder="请输入手机号" name="username" id="telNum" class="text">
+        <input type="text" placeholder="请输入手机号" name="username" id="telNum" class="text" v-model="telNum" ref="newTel" @keydown="nextStep">
       </div>
       <div class="next">
-        <a href="javascript:;" class="nextBtn">下一步</a>
+        <a href="javascript:;" class="nextBtn" @click="showNextStep" :class="{active: active}">下一步</a>
       </div>
     </div>
-    <div>
+    <div v-if="isShow">
       <ul class="mform">
-        <li>
+        <li >
           <span class="mNumIco"></span>
-          <input type="text" placeholder="请输入手机号码" name="bdphone" id="bdphone" readonly="readonly" class="regtext">
+          <input type="text" placeholder="请输入手机号码" name="bdphone" id="bdphone" readonly="readonly" class="regtext" v-model="telNum" ref="tel">
         </li>
         <li>
           <span class="seccodeIco"></span>
@@ -22,33 +22,110 @@
         </li>
         <li>
           <span class="mEmailIco"></span>
-          <input type="text" placeholder="验证码" name="code" id="code" class="regtext">
-          <a href="javascript:void(0);" id="scodebtn" class="get_phonepass afff ft14 w9">获取短信验证码</a>
+          <input type="text" placeholder="验证码" name="code" id="code" class="regtext" ref="code">
+          <a href="javascript:void(0);" id="scodebtn" class="get_phonepass afff ft14 w9" @click="getCode">获取短信验证码</a>
         </li>
         <li>
           <span class="mNameIco"></span>
-          <input type="text" placeholder="你的昵称/用户名" name="username" id="username" class="regtext">
+          <input type="text" placeholder="你的昵称/用户名" name="username" id="username" class="regtext" ref="username">
         </li>
         <li>
           <span class="mpasswordIco"></span>
-          <input type="password" placeholder="请设置密码" name="password" id="password" class="regtext">
+          <input type="password" placeholder="请设置密码" name="password" id="password" class="regtext" ref="password">
         </li>
         <li>
           <span class="mpasswordIco"></span>
-          <input type="password" placeholder="请确认密码" name="passwordag" id="passwordag" class="regtext">
+          <input type="password" placeholder="请确认密码" name="passwordag" id="passwordag" class="regtext" ref="passwordag">
         </li>
       </ul>
       <div class="next">
-        <a href="javascript:;" class="nextBtn">下一步</a>
+        <a href="javascript:;" class="nextBtn" @click="register">注 册</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+  import { Toast } from 'mint-ui'
   export default {
     data (){
-      return {}
+      return {
+        isShow: false,
+        telNum: '',
+        active: false
+      }
+    },
+    methods:{
+      nextStep(){   // 定义键盘事件
+        // 获取用户输入的手机号码
+        const newTel = this.$refs.newTel.value.trim()
+        if(newTel.length === 10){
+          this.active = true
+        }else{
+          this.active = false
+        }
+      },
+      showNextStep(){
+        // 获取用户输入的手机号码
+        const newTel = this.$refs.newTel.value.trim()
+        // 进行输入信息验证
+        const reg = /^1[3-9][0-9]{9}$/
+        if(reg.test(newTel)){
+          this.isShow = true
+          this.tel = newTel
+        }else{
+          Toast({
+            message: "请输入正确格式的手机号码",
+            position: 'top',
+            duration: 3000
+          })
+        }
+      },
+      getCode(){
+        const tel = this.$refs.tel.value.trim()
+        if(tel){
+          axios.get('/api/getcode')
+            .then(response =>{
+              const result = response.data
+            })
+        }else {
+          Toast({
+            message: "请先输入手机号",
+            position: 'top',
+            duration: 3000
+          })
+        }
+      },
+
+      register(){
+        // 获取用户输入的信息
+        const tel = this.$refs.tel.value.trim()
+        const code = this.$refs.code.value.trim()
+        const username = this.$refs.username.value.trim()
+        const password = this.$refs.password.value.trim()
+        const passwordag = this.$refs.passwordag.value.trim()
+        /*
+          创建一个正则表达式，用于验证用户名是否为4-20位的字母或数字或下划线的组合(优化)
+        */
+
+        const url = `/api/register?tel=${tel}&&code=${code}&&username=${username}&&password=${password}&&passwordag=${passwordag}`
+        axios.get(url).then(response => {
+          const user = response.data;
+          Toast({
+            message: user.errMsg,
+            position: 'top',
+            duration: 2000
+          })
+          console.log(user.errMsg)
+          if(user.errMsg === '注册成功'){
+            setTimeout(()=>{
+              location.href="#/login"
+            },2000)
+          }
+        })
+
+      }
     },
     components: {}
   }
@@ -90,6 +167,8 @@
       font-size 15px
       line-height 20px
       text-align center
+    .active
+      background-color red
   .mform
     margin-left 12px
     line-height 1.6

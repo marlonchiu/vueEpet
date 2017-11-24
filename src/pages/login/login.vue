@@ -27,31 +27,31 @@
           <ul class="mform">
             <li>
               <span class="mNameIco"></span>
-              <input type="text" placeholder="手机号/邮箱/用户名" name="username" id="username" class="text">
+              <input type="text" placeholder="手机号/邮箱/用户名" name="username" id="username" class="text" ref="username">
             </li>
             <li>
               <span class="mpasswordIco"></span>
-              <input type="password" placeholder="输入密码" name="password" id="password" class="text">
+              <input type="password" placeholder="输入密码" name="password" id="password" class="text" ref="password">
             </li>
           </ul>
         </form>
-        <form method="post" id="newlogin_form" action="" v-show="!isShow">
+        <form method="get" id="newlogin_form" action="" v-show="!isShow">
           <ul class="mform">
             <li>
               <span class="mNumIco"></span>
-              <input type="text" placeholder="已注册的手机号" name="phone" id="bdphone" class="dttext">
+              <input type="text" placeholder="已注册的手机号" name="tel" id="bdphone" class="tel" ref="tel">
             </li>
             <li>
               <span class="mpasswordIco"></span>
-              <input type="text" placeholder="请输入图片内容" name="varify" id="varify" class="dttext">
+              <input type="text" placeholder="请输入图片内容" name="varify" id="varify" class="dttext" ref="varify">
               <span class="passImg">
                 <img src="./seccode.jpg" alt="">
               </span>
             </li>
             <li>
               <span class="mpasswordIco"></span>
-              <input type="text" placeholder="动态密码" name="code" id="code" class="dttext">
-              <a href="javascript:void(0);" id="scodebtn" class="get_phonepass">获取动态密码</a>
+              <input type="text" placeholder="动态密码" name="code" id="code" class="dttext" ref="code">
+              <a href="javascript:void(0);" id="scodebtn" class="get_phonepass" @click="getCode">获取动态密码</a>
             </li>
           </ul>
         </form>
@@ -59,11 +59,11 @@
       <div class="forgetPass">
         <a href="javascript:;">忘记密码？</a>
       </div>
-      <div class="login_btn" style="">
+      <div class="login_btn" v-show="isShow" @click="login">
         <a href="javascript:;">登 录</a>
       </div>
-      <div class="login_btn" style="display: none;">
-        <a href="javascript:;">登 录</a>
+      <div class="login_btn" v-show="!isShow" @click="islogin">
+        <a href="javascript:;">登 录2</a>
       </div>
       <div class="app">APP专享:E宠团5折包邮,首单满99送99
         <a href="javascript:;" class="cblue">去下载</a>
@@ -90,6 +90,8 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import { Toast } from 'mint-ui'
   export default {
     data (){
       return {
@@ -99,6 +101,61 @@
     methods:{
       change(isShow){
         this.isShow=isShow
+      },
+      login(){
+        // 获取当前用户输入的信息，手机号或者用户名
+        const username = this.$refs.username.value.trim()
+        const password = this.$refs.password.value.trim()
+        console.log(username, password);
+        const url = `/api/login?username=${username}&&password=${password}`
+        axios.get(url).then(response => {
+          const user = response.data
+          Toast({
+            message: user.msg,
+            position: 'top',
+            duration: 3000
+          })
+          setTimeout(()=>{
+            location.href="#/main"
+          },1500)
+        })
+      },
+      islogin(){
+        // 获取当前用户输入的手机号
+        const tel = this.$refs.tel.value.trim()
+        const code = this.$refs.code.value.trim()
+        console.log(tel, code);
+        const url = `/api/islogin?tel=${tel}&&code=${code}`
+        axios.get(url).then(response => {
+          const user = response.data
+          console.log(user);
+          Toast({
+            message: user.msg,
+            position: 'top',
+            duration: 3000
+          })
+
+          if (user.msg === "恭喜您，登录成功~~~"){
+            setTimeout(()=>{
+              location.href="#/main"
+            },2000)
+          }
+        })
+      },
+      getCode(){
+        const tel = this.$refs.tel.value.trim()
+        if(tel){
+          axios.get('/api/getcode')
+            .then(response =>{
+              const result = response.data
+            })
+        }else {
+          Toast({
+            message: "请先输入手机号",
+            position: 'top',
+            duration: 3000
+          })
+        }
       }
     },
     components: {}
