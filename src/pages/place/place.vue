@@ -1,6 +1,6 @@
 <template>
   <div class="place">
-    <topbar></topbar>
+    <topbar topbarTitle = "选择收货地区"></topbar>
     <div class="location" ref="location">
       <div class="stations">
         <a href="javascript:;" @click="changeSite(0)">
@@ -36,6 +36,7 @@
 
 <script>
   import axios from 'axios'
+  import PubSub from 'pubsub-js'
   import topbar from '../../components/topbar/topbar.vue'
   export default {
     data (){
@@ -86,9 +87,13 @@
 
             // 更新地址信息
             this.locationMsg = '选择新地址'
-            this.province= provinceName
+            this.province = provinceName
             this.city = ""
             this.county = ""
+
+            // 发布消息
+            PubSub.publish('location', this.province)
+
           })
 
       },
@@ -141,21 +146,22 @@
             this.county = countyName
 
             // 跳转到主页
-            setTimeout(()=>{
+            /*setTimeout(()=>{
               this.$router.push({ path: '/main' })
-            },200)
+            },200)*/
+
+            history.back()
 
           })
       }
 
     },
-/*    watch:{
+    watch:{
       // 监视数据变化
-      provinces(newData,oldData){
-        console.log("222222222");
-        this.provinces = newData
-      }
-    },*/
+/*      provinces(newData,oldData){
+
+      }*/
+    },
     components: {
       topbar
     }

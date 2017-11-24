@@ -15,7 +15,7 @@
     <div class="epet-search ">
       <div class="location">
         <router-link to="/place">
-          <span class="dogStation c89">狗狗站</span>
+          <span class="dogStation c89">{{variety}}</span>
           <span class="c89">|</span>
           <span data-name="my-place" class="myposition">{{location}}</span>
           <i class="icon_down"></i>
@@ -62,11 +62,13 @@
 
 <script>
   import BScroll from 'better-scroll'
+  import PubSub from 'pubsub-js'
   export default {
     data (){
       return {
         isDownload:true,
-        location: '重庆'
+        variety: '狗狗站',
+        location: ''
       }
     },
     mounted(){
@@ -80,10 +82,23 @@
 
         })
       })
+
+      // 订阅地址和站点选择的信息（得把地址信息存起来）
+      this.location = localStorage.getItem('my-place')
+      PubSub.subscribe('location', ( msg, data )=>{
+        // 修改location
+        this.location = data.slice(0,2)
+        localStorage.setItem('my-place',this.location)
+      })
     },
     methods: {
       closeDownload(){
         this.isDownload=false
+      }
+    },
+    watch:{
+      location(newData, oldData){
+        this.location = newData
       }
     },
     components: {}

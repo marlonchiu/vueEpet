@@ -33,9 +33,12 @@
 
 <script>
   export default {
+    props:{
+      topbarTitle: String
+    },
     data (){
       return {
-        topbarTitle: '服饰城',
+        /*topbarTitle: '服饰城',*/
         isShow: false
       }
     },

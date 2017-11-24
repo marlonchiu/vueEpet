@@ -1,6 +1,6 @@
 <template>
   <div>
-    <topbar></topbar>
+    <topbar topbarTitle = "服饰城"></topbar>
     <div id="detail">
       <div id="wrapper">
         <!--展示图-->
@@ -100,11 +100,6 @@
 <script>
   import topbar from '../../components/topbar/topbar.vue'
   export default {
-    data (){
-      return {
-        topbarTitle: '服饰城'
-      }
-    },
     components: {
       topbar
     }
