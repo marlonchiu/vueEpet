@@ -3,31 +3,31 @@
     <topbar></topbar>
     <div class="location" ref="location">
       <div class="stations">
-        <a href="javascript:;">
-          <span class="cat_station">猫猫站</span>
+        <a href="javascript:;" @click="changeSite(0)">
+          <span class="cat_station" :class="{active: this.site === 0}">猫猫站</span>
         </a>
-        <a href="javascript:;">
-          <span class="dog_station">狗狗站</span>
+        <a href="javascript:;" @click="changeSite(1)">
+          <span class="dog_station" :class="{active: this.site === 1}">狗狗站</span>
         </a>
-        <a href="javascript:;">
-          <span class="water_station">水族站</span>
+        <a href="javascript:;" @click="changeSite(2)">
+          <span class="water_station" :class="{active: this.site === 2}">水族站</span>
         </a>
       </div>
       <div class="default_address" id="defaultAddress">
         <span>
-          当前默认地址:
+          {{locationMsg}}:
           <span v-model="province">{{province}}</span>
           <span v-model="city">{{city}}</span>
           <span v-model="county">{{county}}</span>
         </span>
       </div>
       <ul class="address_list">
-        <li class="address_item" v-for="(province, index) in provinces" v-if="showP">
+        <li class="address_item" @click="showCity(province.id, province.province, index)" v-for="(province, index) in provinces" v-if="showP">
           {{province.province}}
         </li>
-        <li class="address_item" v-if="showC" @click="showContry(city.id,index)" v-for="(city,index) in cities">
+        <li class="address_item" v-if="showC" @click="showContry(city.id, city.city, index)" v-for="(city,index) in cities">
           {{city.city}}</li>
-        <li class="address_item" v-if="showCountry" @click="showArea(county.id,index)" v-for="(county,index) in counties">
+        <li class="address_item" v-if="showCounty" @click="showArea(county.id, county.county, index)" v-for="(county,index) in counties">
           {{county.county}}</li>
       </ul>
     </div>
@@ -40,21 +40,17 @@
   export default {
     data (){
       return {
-        provinces: [
-          {
-            "id": "2",
-            "province": "北京市",
-            "parent": "1"
-          }
-        ],
+        provinces: [],
         cities: [],
         counties: [],
         showP: true,
         showC: false,
-        showCountry: false,
+        showCounty: false,
         province: "北京市",
         city: "昌平区",
-        county: "北七家"
+        county: "北七家",
+        site: 1,
+        locationMsg:'当前默认地址'
       }
     },
     mounted(){
@@ -62,21 +58,107 @@
       axios.get('/api/province')
         .then(response =>{
           console.log(response.data)
-          this.provinces = response.data
+          this.provinces = response.data.data
         })
     },
     methods:{
-      // 请求省份信息
+      // 切换狗狗站、猫猫站或水族站
+      changeSite(index){
+        this.site = index
+      },
+      // 点击某一个省份跳转到该省份的下边的市
+      showCity(provinceId, provinceName, index){
+        axios.get('/api/cities')
+          .then((response)=>{
+            const allCities = response.data.data
+            console.log(allCities);   // 伪数组
+            // 遍历城市
+            const cities=[];
+            Array.prototype.slice.call(allCities).forEach((city)=>{
+              if(city.parent=== provinceId || city.id === provinceId){
+                cities.push(city)
+              }
+            })
+            console.log(cities);
+            this.cities = cities
+            this.showP = false
+            this.showC = true
+
+            // 更新地址信息
+            this.locationMsg = '选择新地址'
+            this.province= provinceName
+            this.city = ""
+            this.county = ""
+          })
+
+      },
+
+      // 点击市跳转到该市下边的区县
+      showContry(cityId, cityName, index){
+        axios.get('/api/counties')
+          .then((response)=>{
+            const allCounties = response.data.data
+            console.log(allCounties);   // 伪数组
+            // 遍历城市
+            const counties=[];
+            Array.prototype.slice.call(allCounties).forEach((country)=>{
+              if(country.parent=== cityId || country.id === cityId){
+                counties.push(country)
+              }
+            })
+            console.log(counties);
+            this.counties = counties
+            this.showP = false
+            this.showC = false
+            this.showCounty = true
+
+            // 更新地址信息
+            this.city = cityName
+          })
+
+      },
+
+      // 点击选择区县完成地址更新
+      showArea(countyId, countyName, index){
+        axios.get('/api/counties')
+          .then((response)=>{
+            const allArea = response.data.data
+            console.log(allArea);
+            // 遍历地区
+            const areas =[]
+            allArea.forEach((area)=>{
+              if(area.parent === countyId || area.id === countyId){
+                areas.push(area)
+              }
+            })
+
+            console.log(areas);
+            this.counties = areas
+            this.showP = false
+            this.showC = false
+            this.showCounty = false
+            // 更新地址信息
+            this.county = countyName
+
+            // 跳转到主页
+            setTimeout(()=>{
+              this.$router.push({ path: '/main' })
+            },200)
+
+          })
+      }
+
     },
-    watch:{
+/*    watch:{
       // 监视数据变化
       provinces(newData,oldData){
         console.log("222222222");
-        console.log(newData);
         this.provinces = newData
       }
-    },
-    components: {topbar}
+    },*/
+    components: {
+      topbar
+    }
   }
 </script>
 
@@ -106,7 +188,7 @@
           padding-bottom 5px
           padding-top 5px
           text-align center
-        .dog_station
+        .active
           background-color red
           color white
     .default_address

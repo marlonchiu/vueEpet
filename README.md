@@ -26,3 +26,6 @@ npm run build --report
   我的E宠 user
 静态路由：
   首页、服饰城clothmall、狗狗主粮、医疗保健、……都是一致的结构
+  
+  
+  
