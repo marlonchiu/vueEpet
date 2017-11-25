@@ -175,7 +175,7 @@ userRouter.get('/register', function (req, res, next) {
   var password = req.query.password;
   var passwordag = req.query.passwordag;
 
-  console.log('/islogin 注册账户', tel, usercode, username, password, passwordag);
+  console.log('/register 注册账户', tel, usercode, username, password, passwordag);
   var users = usersData
 
   // 跟数据库信息进行比对
@@ -196,14 +196,19 @@ userRouter.get('/register', function (req, res, next) {
       res.send({errMsg:"两次输入的密码不符，请重新输入"})
     }else{
       // 注册成功，将信息假如数据库中
-      const user = {
-        username,
-        password,
-        tel,
+      var user = {
+        username: username,
+        password: password,
+        tel: tel,
         id: new Date().getTime(),
         errMsg: "注册成功"
       }
       users.push(user)
+      var file = '../../vueEpt/src/mock/users.json'
+      jsonfile.writeFile(file, users, function (err) {
+        console.error(err)
+      })
+      res.send(user)
     }
   })
 })

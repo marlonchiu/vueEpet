@@ -20,9 +20,23 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
     data (){
       return {}
+    },
+    mounted(){
+      // 通过dispath()来触发action调用获取后台category数据
+      this.$nextTick(()=>{
+        this.$store.dispatch('getCategory')  // 传参actionName
+      })
+    },
+    // computed: mapState['category']
+    computed:{
+      /*category(){
+        return this.$store.state.category
+      }*/
+      ...mapState(['category'])
     },
     methods: {
 

@@ -146,11 +146,11 @@
             this.county = countyName
 
             // 跳转到主页
-            /*setTimeout(()=>{
+            setTimeout(()=>{
               this.$router.push({ path: '/main' })
-            },200)*/
+            },200)
 
-            history.back()
+            /*history.back()*/
 
           })
       }

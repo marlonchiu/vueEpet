@@ -17,6 +17,7 @@
     "blueimp-md5": "^2.10.0",
     "date-fns": "^1.29.0",
     "js-base64": "^2.3.2",
+    "jsonfile": "^4.0.0",
     "mint-ui": "^2.2.10",
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.19.2",
