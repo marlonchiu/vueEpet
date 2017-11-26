@@ -2,25 +2,17 @@
   <div class="tab1">
     <div class="leftbox" ref="leftbox">
       <ul class="liList">
-        <li class="active" v-for="(sort,index) in classes" :key="index">{{sort}}</li>
-        <!--<li>狗狗主粮</li>
-        <li>狗狗零食</li>
-        <li>狗狗服饰</li>
-        <li>狗狗窝垫</li>
-        <li>狗狗生活</li>
-        <li>狗狗玩具</li>
-        <li>狗狗保健</li>
-        <li>狗狗医疗</li>
-        <li>狗狗牵引</li>
+        <!--<li class="active" v-for="(sort, index) in category.sort" :key="index">
+          {{sort.name}}</li>-->
+        <li v-for="(sort, index) in category.sort" :key="index">
+          {{sort.name}}</li>
+        <!--增加用于测试Better-Scroll-->
         <li>狗狗美容</li>
         <li>狗狗周边</li>
         <li>狗狗清洁</li>
         <li>狗狗保健</li>
         <li>狗狗医疗</li>
         <li>狗狗牵引</li>
-        <li>狗狗美容</li>
-        <li>狗狗周边</li>
-        <li>狗狗清洁</li>-->
       </ul>
     </div>
     <div class="rightbox">
@@ -82,23 +74,41 @@
 <script>
   import BScroll from 'better-scroll'
   export default {
-    data (){
-      return {
-        classes: Array
-      }
+    props:{
+      category: Object
     },
     mounted(){
-      const ul = this.$refs.leftbox.children[0]
-      const liHeight = 50
-      const liCount = ul.children.length
-      ul.style.height = liCount * liHeight + 'px'
-      this.$nextTick(()=>{
-        new BScroll(this.$refs.leftbox,{
-          click:true,
-        })
-      })
+      // 如果还没有数据, 不创建BScroll对象
+      if(!this.category){
+        return
+      }
+      // 只有当有数据创建创建scroll对象
+      this._initScroll ()  // 从其它路由切换过来
+
     },
-    components: {}
+    watch: {
+      // 监视数据变化，创建BScroll对象（在当前路由一上来是没有数据的）
+      category (newCategory, oldCategory){  // category更新
+        this._initScroll()  // 直接刷新当前路由
+      }
+    },
+    methods: {
+      _initScroll () {
+        // 创建左侧列表的BScroll对象
+        this.$nextTick(()=>{
+          const ul = this.$refs.leftbox.children[0]
+          const liHeight = 50
+          const liCount = ul.children.length
+          console.log(liCount);
+          ul.style.height = liCount * liHeight + 'px'
+
+          new BScroll(this.$refs.leftbox,{
+            click:true,
+            probeType: 2
+          })
+        })
+      }
+    }
   }
 </script>
 

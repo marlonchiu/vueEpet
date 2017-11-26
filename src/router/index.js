@@ -11,6 +11,13 @@ import register from '../pages/register/register.vue'
 import clothmall from '../pages/clothmall/clothmall.vue'
 import sort from '../components/sort/sort.vue'
 import brand from '../components/brand/brand.vue'
+// 路由懒加载
+// const main = () => import('../pages/main/main.vue')
+// const cart = () => import('../pages/cart/cart.vue')
+// const category = () => import('../pages/category/category.vue')
+// const place = () => import('../pages/place/place.vue)
+// const login = () => import('../pages/login/login.vue')
+// const register = () => import('../pages/register/register.vue')
 
 Vue.use(VueRouter)
 export default new VueRouter({

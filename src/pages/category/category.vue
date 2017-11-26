@@ -15,8 +15,10 @@
         <img class="search" src="./search-ico.png" >
       </a>
     </header>
-      <router-view :classes="classes"></router-view>
+      <router-view :category="category"></router-view>
+
   </div>
+
 </template>
 
 <script>
@@ -24,7 +26,6 @@
   export default {
     data (){
       return {
-        classes: []
       }
     },
     mounted(){
@@ -32,6 +33,7 @@
       this.$nextTick(()=>{
         this.$store.dispatch('getCategory')  // 传参actionName
       })
+
     },
     // computed: mapState['category']
     computed:{
@@ -39,6 +41,7 @@
         return this.$store.state.category
       }*/
       ...mapState(['category'])
+
     },
     methods: {
 
