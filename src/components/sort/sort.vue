@@ -2,8 +2,8 @@
   <div class="tab1">
     <div class="leftbox" ref="leftbox">
       <ul class="liList">
-        <li class="active">为您推荐</li>
-        <li>狗狗主粮</li>
+        <li class="active" v-for="(sort,index) in classes" :key="index">{{sort}}</li>
+        <!--<li>狗狗主粮</li>
         <li>狗狗零食</li>
         <li>狗狗服饰</li>
         <li>狗狗窝垫</li>
@@ -20,7 +20,7 @@
         <li>狗狗牵引</li>
         <li>狗狗美容</li>
         <li>狗狗周边</li>
-        <li>狗狗清洁</li>
+        <li>狗狗清洁</li>-->
       </ul>
     </div>
     <div class="rightbox">
@@ -83,7 +83,9 @@
   import BScroll from 'better-scroll'
   export default {
     data (){
-      return {}
+      return {
+        classes: Array
+      }
     },
     mounted(){
       const ul = this.$refs.leftbox.children[0]

@@ -15,7 +15,7 @@
         <img class="search" src="./search-ico.png" >
       </a>
     </header>
-      <router-view></router-view>
+      <router-view :classes="classes"></router-view>
   </div>
 </template>
 
@@ -23,7 +23,9 @@
   import {mapState} from 'vuex'
   export default {
     data (){
-      return {}
+      return {
+        classes: []
+      }
     },
     mounted(){
       // 通过dispath()来触发action调用获取后台category数据
